@@ -17,13 +17,15 @@ class UserRepository():
         return [val.email for val in cls._users.values()]
 
     @classmethod
-    def create_user(cls, username: str, email: EmailStr, password: str) -> User:
-        if username in cls.get_usernames():
-            raise UsernameExistsException(f"Username {username} already exists")
-        if email in cls.get_emails():
-            raise EmailExistsException(f"Email {email} already exists")
+    def create_user(cls, dto: UserCreate) -> User:
+        if dto.username in cls.get_usernames():
+            raise UsernameExistsException(f"Username {dto.username} already exists")
+        if dto.email in cls.get_emails():
+            raise EmailExistsException(f"Email {dto.email} already exists")
+            
         cls._user_id_counter += 1
-        user = User(id=cls._user_id_counter, username=username, email=email, password=password)
+
+        user = User(id=cls._user_id_counter, **dto.model_dump())
         cls._users[user.id] = user
         return user
 
@@ -46,23 +48,22 @@ class UserRepository():
         return list(cls._users.values())
 
     @classmethod
-    def update_user(cls, id: int, username: str, email: str, password: str) -> User:
+    def update_user(cls, id: int, dto: UserUpdate) -> User:
         user = cls.get_user(id)
-        new_username = username.lower()
-        new_email = email.lower()
+        new_username = dto.username.lower()
+        new_email = dto.email.lower()
 
         for other_user in cls.get_all_users():
             if other_user.id == user.id:
                 continue
-
             if other_user.username.lower() == new_username:
                 raise UsernameExistsException(f"Username {new_username} already exists")
             if other_user.email.lower() == new_email:
-                raise EmailExistsException(f"Email {email} already exists")
+                raise EmailExistsException(f"Email {dto.email} already exists")
 
-        user.email = email
-        user.username = username
-        user.password = password
+        user.email = dto.email
+        user.username = dto.username
+        user.password = dto.password
         return user
 
     @classmethod

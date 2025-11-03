@@ -4,7 +4,7 @@ from repository.exceptions import MovieNotFoundException, MovieTitleExistsExcept
 
 class MovieRepository():
     _movie_id_counter: int = 0
-    _movies = {}
+     _movies = {}
     _movies_by_title = {}
 
     @classmethod

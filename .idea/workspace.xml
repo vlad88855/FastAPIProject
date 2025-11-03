@@ -5,28 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="13ec6e7e-ac23-4930-9a2f-e6a7ed2442bd" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/FastAPIProject.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/controller/MovieController.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/controller/UserController.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/controller/UserRatingController.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/controller/exceptions.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/model/Movie.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/model/User.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/repository/MovieRepository.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/repository/UserRatingRepository.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/repository/UserRepository.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/repository/exceptions.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/service/MovieService.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/service/UserRatingService.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/service/UserService.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/service/exceptions.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test_main.http" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/db.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controller/MovieController.py" beforeDir="false" afterPath="$PROJECT_DIR$/controller/MovieController.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controller/UserController.py" beforeDir="false" afterPath="$PROJECT_DIR$/controller/UserController.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controller/UserRatingController.py" beforeDir="false" afterPath="$PROJECT_DIR$/controller/UserRatingController.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/User.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/User.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/repository/MovieRepository.py" beforeDir="false" afterPath="$PROJECT_DIR$/repository/MovieRepository.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,6 +48,7 @@
     &quot;FastAPI.FastAPIProject.executor&quot;: &quot;Run&quot;,
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
@@ -114,24 +102,35 @@
       <workItem from="1758981142280" duration="7481000" />
       <workItem from="1759072241584" duration="2265000" />
       <workItem from="1759185603534" duration="17954000" />
+      <workItem from="1761782504473" duration="1691000" />
+      <workItem from="1761919127942" duration="959000" />
+      <workItem from="1761920115581" duration="2451000" />
+      <workItem from="1762101477852" duration="1878000" />
+      <workItem from="1762197671089" duration="2197000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/controller/MovieController.py</url>
-          <line>20</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="CUSTOM_BOOLEAN_PROPERTIES">
+                <map>
+                  <entry key="Show.Git.Branches" value="true" />
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/FastAPIProject$FastAPIProject.coverage" NAME="FastAPIProject Coverage Results" MODIFIED="1759319481815" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/FastAPIProject$FastAPIProject.coverage" NAME="FastAPIProject Coverage Results" MODIFIED="1761919140941" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
 </project>

@@ -1,4 +1,7 @@
 from fastapi import APIRouter
+from fastapi import Depends
+from sqlalchemy.orm import Session
+from db import get_db
 
 from controller.UserController import get_user
 from service.MovieService import MovieService
@@ -25,9 +28,11 @@ async def delete_movie(id: int):
 @router.get("/movies")
 async def get_movies():
     return MovieService.get_all_movies()
+
 @router.delete("/movies")
 async def delete_movies():
     return MovieService.delete_all_movies()
+
 @router.post("/movies/{movie_id}/watch/{user_id}")
 async def watch_movie(movie_id: int, user_id: int):
     return MovieService.watch_movie(movie_id, user_id)
