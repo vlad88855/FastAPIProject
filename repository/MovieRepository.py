@@ -1,78 +1,67 @@
-from model.Movie import Movie
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import Session
+
+from model.MovieORM import MovieORM
+from model.DTOs.MovieDTO import MovieCreate, MovieUpdate
 from repository.exceptions import MovieNotFoundException, MovieTitleExistsException
 
 
 class MovieRepository():
-    _movie_id_counter: int = 0
-     _movies = {}
-    _movies_by_title = {}
+    def __init__(self, db: Session):
+        self.db = db
 
-    @classmethod
-    def create_movie(cls, title: str, year:int, genre: str, view_count: int | None = None) -> Movie:
-        if title.lower() in cls._movies_by_title:
-            raise MovieTitleExistsException(f"Movie {title} already exists")
+    def create_movie(self, dto: MovieCreate) -> MovieORM:
+        try:
+            movie = MovieORM(title=dto.title, year=dto.year, genre=dto.genre)
+            self.db.add(movie)
+            self.db.commit()
+            self.db.refresh(movie)
+            return movie
+        except IntegrityError as e:
+            self.db.rollback()
+            msg = str(e.orig).lower()
+            if "uq_movies_title" in msg or "title" in msg:
+                raise MovieTitleExistsException(f"Movie {dto.title} already exists")
+            raise e
 
-        cls._movie_id_counter += 1
-
-        movie = Movie(id=cls._movie_id_counter, title=title, year=year, genre=genre)
-        if (view_count is not None):
-            movie.view_count = view_count
-
-        cls._movies[movie.id] = movie
-        cls._movies_by_title[movie.title.lower()] = movie
-
-        return movie
-
-    @classmethod
-    def delete_movie(cls, id: int):
-        movie_to_delete = cls._movies.get(id)
-
-        if not movie_to_delete:
-            raise MovieNotFoundException(f"Фільм з ID {id} не знайдено.")
-
-        del cls._movies[id]
-        del cls._movies_by_title[movie_to_delete.title.lower()]
-
-    @classmethod
-    def delete_all_movies(cls):
-        cls._movies.clear()
-
-    @classmethod
-    def get_movie(cls, id: int) -> Movie:
-        movie = cls._movies.get(id)
+    def get_movie(self, id: int) -> MovieORM:
+        movie = self.db.get(MovieORM, id)
         if not movie:
-            raise MovieNotFoundException(f"Фільм з ID {id} не знайдено.")
+            raise MovieNotFoundException(f"Movie {id} not found")
         return movie
 
-    @classmethod
-    def get_all_movies(cls) -> list[Movie]:
-        return list(cls._movies.values())
+    def update_movie(self, id: int, dto: MovieUpdate) -> MovieORM:
+        try:
+            movie = self.get_movie(id)
+            if dto.title is not None:
+                movie.title = dto.title
+            if dto.year is not None:
+                movie.year = dto.year
+            if dto.genre is not None:
+                movie.genre = dto.genre
+            self.db.commit()
+            self.db.refresh(movie)
+        except IntegrityError as e:
+            self.db.rollback()
+            msg = str(e.orig).lower()
+            if "uq_movies_title" in msg or "title" in msg:
+                raise MovieTitleExistsException(f"Movie {dto.title} already exists")
+            raise e
+        return movie
 
-    @classmethod
-    def update_movie(cls, id: int, title: str, year: int, genre: str, view_count: int | None = None) -> Movie:
-        movie_to_update = cls._movies.get(id)
-
-        if not movie_to_update:
-            raise MovieNotFoundException()
-
-        new_title_lower = title.lower()
-        old_title_lower = movie_to_update.title.lower()
-
-        if new_title_lower != old_title_lower and new_title_lower in cls._movies_by_title:
-            raise MovieTitleExistsException(f"Movie {title} already exists")
-
-        del cls._movies_by_title[old_title_lower]
-
-        movie_to_update.title = title
-        movie_to_update.year = year
-        movie_to_update.genre = genre
-        if view_count is not None:
-            movie_to_update.view_count = view_count
-
-        cls._movies_by_title[new_title_lower] = movie_to_update
-
-        return movie_to_update
-    @classmethod
-    def increment_view_count(cls, id: int) -> None:
-        movie_to_update = cls._movies.get(id)
-        movie_to_update.view_count += 1
+    def delete_movie(self, id: int) -> None:
+        movie = self.get_movie(id)
+        self.db.delete(movie)
+        self.db.commit()
+            
+    def delete_all_movies(self) -> None:
+        self.db.query(MovieORM).delete()
+        self.db.commit()
+    
+    def increment_view_count(self, id: int) -> MovieORM:
+        movie = self.get_movie(id)
+        movie.view_count += 1
+        self.db.commit()
+        self.db.refresh(movie)
+        return movie
+        

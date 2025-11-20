@@ -1,31 +1,30 @@
-from pydantic import EmailStr
-
-from model.User import User
-from repository import UserRepository
+from model.UserORM import UserORM
+from model.DTOs.UserDTO import UserCreate, UserOut, UserUpdate
 from repository.UserRepository import UserRepository
-
 
 class UserService():
 
-    @classmethod
-    def create_user(cls, username: str, email: EmailStr, password: str) -> User:
-        return UserRepository.create_user(username, email, password)
+    def __init__(self, repository: UserRepository):
+        self.repository = repository
 
-    @classmethod
-    def delete_user(cls, id: int):
-        return UserRepository.delete_user(id)
+    def create_user(self, dto: UserCreate) -> UserOut:
+        user = self.repository.create_user(dto)
+        return UserOut.model_validate(user)
 
-    @classmethod
-    def get_user(cls, id: int) -> User:
-        return UserRepository.get_user(id)
-    @classmethod
-    def get_all_users(cls) -> dict:
-        return UserRepository.get_all_users()
+    def delete_user(self, id: int):
+        return self.repository.delete_user(id)
 
-    @classmethod
-    def update_user(cls, id: int, username: str, email: str, password: str) -> User:
-        return UserRepository.update_user(id, username, email, password)
-    @classmethod
-    def delete_all_movies(cls):
-        UserRepository.delete_all_users()
+    def get_user(self, id: int) -> UserOut:
+        user = self.repository.get_user(id)
+        return UserOut.model_validate(user)
 
+    def get_all_users(self) -> list[UserOut]:
+        users = self.repository.get_all_users()
+        return [UserOut.model_validate(user) for user in users]
+
+    def update_user(self, id: int, dto: UserUpdate) -> UserOut:
+        user = self.repository.update_user(id, dto)
+        return UserOut.model_validate(user)
+
+    def delete_all_users(self):
+        return self.repository.delete_all_users()

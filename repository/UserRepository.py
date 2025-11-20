@@ -1,71 +1,75 @@
 from pydantic import EmailStr
+from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
 
-from model.User import User
+from model.DTOs.UserDTO import UserCreate, UserUpdate
+from model.UserORM import UserORM
 from repository.exceptions import EmailExistsException, UsernameExistsException, UserNotFoundException
 
 
 class UserRepository():
-    _user_id_counter: int = 0
-    _users = {}
+    def __init__(self, db: Session):
+        self.db = db
 
-
-    @classmethod
-    def get_usernames(cls) -> list[str]:
-        return [val.username for val in cls._users.values()]
-    @classmethod
-    def get_emails(cls) -> list[EmailStr]:
-        return [val.email for val in cls._users.values()]
-
-    @classmethod
-    def create_user(cls, dto: UserCreate) -> User:
-        if dto.username in cls.get_usernames():
-            raise UsernameExistsException(f"Username {dto.username} already exists")
-        if dto.email in cls.get_emails():
-            raise EmailExistsException(f"Email {dto.email} already exists")
-            
-        cls._user_id_counter += 1
-
-        user = User(id=cls._user_id_counter, **dto.model_dump())
-        cls._users[user.id] = user
-        return user
-
-    @classmethod
-    def delete_user(cls, id: int):
-        user = cls._users.get(id)
-        if not user:
-            raise UserNotFoundException(f"Username {id} does not exist")
-        cls._users.pop(id)
-
-    @classmethod
-    def get_user(cls, id: int) -> User:
-        user = cls._users.get(id)
-        if not user:
-            raise UserNotFoundException(f"Username {id} does not exist")
-        return user
-
-    @classmethod
-    def get_all_users(cls) -> list[User]:
-        return list(cls._users.values())
-
-    @classmethod
-    def update_user(cls, id: int, dto: UserUpdate) -> User:
-        user = cls.get_user(id)
-        new_username = dto.username.lower()
-        new_email = dto.email.lower()
-
-        for other_user in cls.get_all_users():
-            if other_user.id == user.id:
-                continue
-            if other_user.username.lower() == new_username:
-                raise UsernameExistsException(f"Username {new_username} already exists")
-            if other_user.email.lower() == new_email:
+    def create_user(self, dto: UserCreate) -> UserORM:
+        try:
+            user = UserORM(username=dto.username, email=dto.email, password=dto.password)
+            self.db.add(user)
+            self.db.commit()
+            self.db.refresh(user)
+            return user
+        except IntegrityError as e:
+            self.db.rollback()
+            msg = str(e.orig).lower()
+            if "uq_users_username" in msg or "username" in msg:
+                raise UsernameExistsException(f"Username {dto.username} already exists")
+            if "uq_users_email" in msg or "email" in msg:
                 raise EmailExistsException(f"Email {dto.email} already exists")
+            raise
 
-        user.email = dto.email
-        user.username = dto.username
-        user.password = dto.password
+    def delete_user(self, id: int):
+        try:
+            user = self.get_user(id)
+            self.db.delete(user)
+            self.db.commit()
+        except IntegrityError as e:
+            self.db.rollback()
+            raise e
+
+    def get_user(self, id: int) -> UserORM:
+        user = self.db.get(UserORM, id)
+        if not user:
+            raise UserNotFoundException(f"User {id} not found")
         return user
 
-    @classmethod
-    def delete_all_users(cls):
-        cls._users.clear()
+    def get_all_users(self) -> list[UserORM]:
+        users = self.db.query(UserORM).all()
+        return users
+
+    def update_user(self, id: int, dto: UserUpdate) -> UserORM:
+        user = self.get_user(id)
+        if dto.username is not None:
+            user.username = dto.username
+        if dto.email is not None:
+            user.email = dto.email
+        if dto.password is not None:
+            user.password = dto.password
+        try:
+            self.db.commit()
+        except IntegrityError as ex:
+            self.db.rollback()
+            msg = str(ex.orig).lower()
+            if "uq_users_username" in msg or "username" in msg:
+                raise UsernameExistsException(f"Username {dto.username} already exists")
+            if "uq_users_email" in msg or "email" in msg:
+                raise EmailExistsException(f"Email {dto.email} already exists")
+            raise
+        self.db.refresh(user)
+        return user
+    def delete_all_users(self) -> None:
+        try:
+            self.db.query(UserORM).delete()
+            self.db.commit()
+        except IntegrityError as e:
+            self.db.rollback()
+            raise e

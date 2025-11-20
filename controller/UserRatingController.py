@@ -1,31 +1,60 @@
-from fastapi import APIRouter
-from fastapi import Depends
+from typing import List
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from db import get_db
 
+from model.DTOs.UserRatingDTO import UserRatingCreate, UserRatingOut, UserRatingUpdate
+
 from service.UserRatingService import UserRatingService
+from repository.UserRatingRepository import UserRatingRepository
+from repository.UserRepository import UserRepository
+from repository.MovieRepository import MovieRepository
 
-router = APIRouter()
+router = APIRouter(tags=["User Ratings methods"])
 
-@router.get("/userRating/{id}")
-async def get_userRating(id: int):
-    return UserRatingService.get_user_rating(id)
+def get_user_rating_service(db: Session = Depends(get_db)) -> UserRatingService:
+    return UserRatingService(
+        rating_repo=UserRatingRepository(db),
+        user_repo=UserRepository(db),
+        movie_repo=MovieRepository(db)
+    )
+@router.post("/userRating", response_model=UserRatingOut)
+async def create_userRating(
+    dto: UserRatingCreate,
+    service: UserRatingService = Depends(get_user_rating_service)
+):
+    return service.create_rating(dto)
 
-@router.post("/userRating")
-async def create_userRating(movie_id: int, user_id: int, rating: float):
-    return UserRatingService.create_user_rating(movie_id, user_id, rating)
+@router.get("/userRating/{id}", response_model=UserRatingOut)
+async def get_userRating(
+    id: int,
+    service: UserRatingService = Depends(get_user_rating_service)
+):
+    return service.get_rating(id)
 
-@router.put("/userRating/{id}")
-async def update_userRating(id: int, rating: float):
-    return UserRatingService.update_user_rating(id, rating)
+@router.put("/userRating/{id}", response_model=UserRatingOut)
+async def update_userRating(
+    id: int,
+    dto: UserRatingUpdate,
+    service: UserRatingService = Depends(get_user_rating_service)
+):
+    return service.update_rating(id, dto)
 
 @router.delete("/userRating/{id}")
-async def delete_userRating(id: int):
-    return UserRatingService.delete_user_rating(id)
+async def delete_userRating(
+    id: int,
+    service: UserRatingService = Depends(get_user_rating_service)
+):
+    service.delete_rating(id)
 
-@router.get("/userRating")
-async def get_userRatings():
-    return UserRatingService.get_all_user_ratings()
+@router.get("/userRating", response_model=List[UserRatingOut])
+async def get_userRatings(
+    service: UserRatingService = Depends(get_user_rating_service)
+):
+    return service.get_all_ratings()
+
 @router.delete("/userRating")
-async def delete_all_user_ratings():
-    return UserRatingService.delete_all_user_ratings()
+async def delete_all_user_ratings(
+    service: UserRatingService = Depends(get_user_rating_service)
+):
+    service.delete_all_ratings()

@@ -1,46 +1,63 @@
-from model.UserRating import UserRating
-from repository.exceptions import UserRatingNotFoundException
+from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
+
+from model.UserRatingORM import UserRatingORM
+from model.DTOs.UserRatingDTO import UserRatingCreate, UserRatingUpdate
+from repository.exceptions import UserRatingNotFoundException, UserRatingExistsException
 
 
 class UserRatingRepository():
-    user_rating_id_counter: int = 0
-    user_ratings = {}
 
-    @classmethod
-    def create_user_rating(cls, movie_id: int, user_id: int, rating: float) -> UserRating:
-        cls.user_rating_id_counter += 1
-        user_rating = UserRating(id=cls.user_rating_id_counter, movie_id=movie_id, user_id=user_id, rating=rating)
-        cls.user_ratings[cls.user_rating_id_counter] = user_rating
-        return user_rating
+    def __init__(self, db: Session):
+        self.db = db
 
-    @classmethod
-    def delete_user_rating(cls, id:int) -> None:
-        user_rating = cls.get_user_rating(id)
-        cls.user_ratings.pop(user_rating.id)
+    def create_rating(self, dto: UserRatingCreate) -> UserRatingORM:
+        try:
+            rating = UserRatingORM(
+                user_id=dto.user_id,
+                movie_id=dto.movie_id,
+                rating=dto.rating
+            )
+            self.db.add(rating)
+            self.db.commit()
+            self.db.refresh(rating)
+            return rating
+        except IntegrityError as e:
+            self.db.rollback()
+            if "uq_user_movie_rating" in str(e.orig).lower():
+                raise UserRatingExistsException(
+                    f"User {dto.user_id} rating for movie {dto.movie_id} already exists"
+                )
+            raise e
 
-    @classmethod
-    def delete_all_user_ratings(cls):
-        cls.user_ratings.clear()
+    def delete_rating(self, id: int) -> None:
+        rating = self.get_rating(id)
+        self.db.delete(rating)
+        self.db.commit()
 
-    @classmethod
-    def get_user_rating(cls, id:int) -> UserRating:
-        user_rating = cls.user_ratings.get(id)
-        if not user_rating:
+    def delete_all_ratings(self) -> None:
+        self.db.query(UserRatingORM).delete()
+        self.db.commit()
+
+    def get_rating(self, id: int) -> UserRatingORM:
+        rating = self.db.get(UserRatingORM, id)
+        if not rating:
             raise UserRatingNotFoundException(f"UserRating {id} not found")
-        return user_rating
+        return rating
 
-    @classmethod
-    def find_user_rating_by_sec_key(cls, user_id: int, movie_id: int) -> UserRating | None:
-        for user_rating in cls.user_ratings.values():
-            if user_rating.user_id == user_id and user_rating.movie_id == movie_id:
-                return user_rating
-        return None
+    def find_rating_by_user_movie(self, user_id: int, movie_id: int) -> UserRatingORM | None:
+        return self.db.query(UserRatingORM).filter_by(
+            user_id=user_id,
+            movie_id=movie_id
+        ).first()
 
-    @classmethod
-    def get_all_user_ratings(cls) -> list[UserRating]:
-        return list(cls.user_ratings.values())
+    def get_all_ratings(self) -> list[UserRatingORM]:
+        return self.db.query(UserRatingORM).all()
 
-    @classmethod
-    def update_user_rating(cls, id: int, rating: float):
-        user_rating = cls.get_user_rating(id)
-        user_rating.rating = rating
+    def update_rating(self, id: int, dto: UserRatingUpdate) -> UserRatingORM:
+        rating = self.get_rating(id)
+        rating.rating = dto.rating
+
+        self.db.commit()
+        self.db.refresh(rating)
+        return rating

@@ -1,38 +1,45 @@
+from typing import Optional, List
+from model.DTOs.UserRatingDTO import UserRatingOut, UserRatingUpdate, UserRatingCreate
 from repository.MovieRepository import MovieRepository
 from repository.UserRatingRepository import UserRatingRepository
-from model.UserRating import UserRating
 from repository.UserRepository import UserRepository
 from repository.exceptions import UserRatingExistsException
 
 
-class UserRatingService():
+class UserRatingService:
 
-    @classmethod
-    def create_user_rating(cls, movie_id: int, user_id: int, rating: float) -> UserRating:
-        UserRepository.get_user(user_id)
-        MovieRepository.get_movie(movie_id)
-        user_rating = UserRatingRepository.find_user_rating_by_sec_key(user_id, movie_id)
-        if user_rating:
-            raise UserRatingExistsException()
-        return UserRatingRepository.create_user_rating(movie_id, user_id, rating)
+    def __init__(self, rating_repo: UserRatingRepository, user_repo: UserRepository, movie_repo: MovieRepository):
+        self.rating_repo = rating_repo
+        self.user_repo = user_repo
+        self.movie_repo = movie_repo
 
+    def create_rating(self, dto: UserRatingCreate) -> UserRatingOut:
+        self.user_repo.get_user(dto.user_id)
+        self.movie_repo.get_movie(dto.movie_id)
 
-    @classmethod
-    def delete_user_rating(cls, id: int):
-        return UserRatingRepository.delete_user_rating(id)
+        existing_rating = self.rating_repo.find_rating_by_user_movie(dto.user_id, dto.movie_id)
+        if existing_rating:
+            raise UserRatingExistsException(
+                f"User {dto.user_id} rating for movie {dto.movie_id} already exists"
+            )
 
-    @classmethod
-    def get_user_rating(cls, id: int) -> UserRating | None:
-        return UserRatingRepository.get_user_rating(id)
+        rating_obj = self.rating_repo.create_rating(dto)
+        return UserRatingOut.model_validate(rating_obj)
 
-    @classmethod
-    def get_all_user_ratings(cls) -> dict:
-        return UserRatingRepository.get_all_user_ratings()
+    def delete_rating(self, id: int) -> None:
+        self.rating_repo.delete_rating(id)
 
-    @classmethod
-    def update_user_rating(cls, id: int, rating: float) -> UserRating | None:
-        return UserRatingRepository.update_user_rating(id, rating)
+    def get_rating(self, id: int) -> UserRatingOut:
+        rating_obj = self.rating_repo.get_rating(id)
+        return UserRatingOut.model_validate(rating_obj)
 
-    @classmethod
-    def delete_all_user_ratings(cls):
-        UserRatingRepository.delete_all_user_ratings()
+    def get_all_ratings(self) -> List[UserRatingOut]:
+        ratings = self.rating_repo.get_all_ratings()
+        return [UserRatingOut.model_validate(r) for r in ratings]
+
+    def update_rating(self, id: int, dto: UserRatingUpdate) -> UserRatingOut:
+        rating_obj = self.rating_repo.update_rating(id, dto)
+        return UserRatingOut.model_validate(rating_obj)
+
+    def delete_all_ratings(self) -> None:
+        self.rating_repo.delete_all_ratings()
