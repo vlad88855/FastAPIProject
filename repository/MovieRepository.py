@@ -1,14 +1,17 @@
+import logging
+from typing import List
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from model.MovieORM import MovieORM
-from model.DTOs.MovieDTO import MovieCreate, MovieUpdate
+from model.DTOs.MovieDTO import MovieCreate, MovieUpdate, MovieGenre
 from repository.exceptions import MovieNotFoundException, MovieTitleExistsException
 
 
 class MovieRepository():
     def __init__(self, db: Session):
         self.db = db
+        self.logger = logging.getLogger(__name__)
 
     def create_movie(self, dto: MovieCreate) -> MovieORM:
         try:
@@ -16,6 +19,7 @@ class MovieRepository():
             self.db.add(movie)
             self.db.commit()
             self.db.refresh(movie)
+            self.logger.info(f"Created movie: {movie.title}")
             return movie
         except IntegrityError as e:
             self.db.rollback()
@@ -29,6 +33,18 @@ class MovieRepository():
         if not movie:
             raise MovieNotFoundException(f"Movie {id} not found")
         return movie
+    
+    def get_all(self) -> List[MovieORM]:
+        self.logger.info("Fetching all movies")
+        return self.db.query(MovieORM).all()
+
+    def get_paginated(self, skip: int, limit: int) -> List[MovieORM]:
+        self.logger.info(f"Fetching movies with skip={skip}, limit={limit}")
+        return self.db.query(MovieORM).offset(skip).limit(limit).all()
+
+    def get_by_genre(self, genre: MovieGenre, skip: int, limit: int) -> List[MovieORM]:
+        self.logger.info(f"Fetching movies with genre={genre}, skip={skip}, limit={limit}")
+        return self.db.query(MovieORM).filter(MovieORM.genre == genre).offset(skip).limit(limit).all()
 
     def update_movie(self, id: int, dto: MovieUpdate) -> MovieORM:
         try:
@@ -64,4 +80,3 @@ class MovieRepository():
         self.db.commit()
         self.db.refresh(movie)
         return movie
-        

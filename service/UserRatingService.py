@@ -4,14 +4,16 @@ from repository.MovieRepository import MovieRepository
 from repository.UserRatingRepository import UserRatingRepository
 from repository.UserRepository import UserRepository
 from repository.exceptions import UserRatingExistsException
+from service.AchievementService import AchievementService
 
 
 class UserRatingService:
 
-    def __init__(self, rating_repo: UserRatingRepository, user_repo: UserRepository, movie_repo: MovieRepository):
+    def __init__(self, rating_repo: UserRatingRepository, user_repo: UserRepository, movie_repo: MovieRepository, achievement_service: AchievementService):
         self.rating_repo = rating_repo
         self.user_repo = user_repo
         self.movie_repo = movie_repo
+        self.achievement_service = achievement_service
 
     def create_rating(self, dto: UserRatingCreate) -> UserRatingOut:
         self.user_repo.get_user(dto.user_id)
@@ -24,6 +26,9 @@ class UserRatingService:
             )
 
         rating_obj = self.rating_repo.create_rating(dto)
+        
+        self.achievement_service.check_new_achievements(dto.user_id)
+        
         return UserRatingOut.model_validate(rating_obj)
 
     def delete_rating(self, id: int) -> None:

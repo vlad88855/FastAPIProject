@@ -5,21 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="13ec6e7e-ac23-4930-9a2f-e6a7ed2442bd" name="Changes" comment="Last version before turning to db">
-      <change afterPath="$PROJECT_DIR$/model/DTOs/UserRatingDTO.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/model/UserRatingORM.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/controller/MovieController.py" beforeDir="false" afterPath="$PROJECT_DIR$/controller/MovieController.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/controller/UserController.py" beforeDir="false" afterPath="$PROJECT_DIR$/controller/UserController.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/controller/UserRatingController.py" beforeDir="false" afterPath="$PROJECT_DIR$/controller/UserRatingController.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/DTOs/UserDTO.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/DTOs/UserDTO.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/Movie.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/User.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/UserRating.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/db.py" beforeDir="false" afterPath="$PROJECT_DIR$/db.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/repository/MovieRepository.py" beforeDir="false" afterPath="$PROJECT_DIR$/repository/MovieRepository.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/repository/UserRatingRepository.py" beforeDir="false" afterPath="$PROJECT_DIR$/repository/UserRatingRepository.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/repository/UserRepository.py" beforeDir="false" afterPath="$PROJECT_DIR$/repository/UserRepository.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/service/MovieService.py" beforeDir="false" afterPath="$PROJECT_DIR$/service/MovieService.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/service/UserRatingService.py" beforeDir="false" afterPath="$PROJECT_DIR$/service/UserRatingService.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/service/UserService.py" beforeDir="false" afterPath="$PROJECT_DIR$/service/UserService.py" afterDir="false" />
@@ -125,7 +117,7 @@
       <workItem from="1762462042587" duration="690000" />
       <workItem from="1762787497048" duration="8525000" />
       <workItem from="1762939520164" duration="9322000" />
-      <workItem from="1763585922753" duration="4133000" />
+      <workItem from="1763585922753" duration="8113000" />
     </task>
     <task id="LOCAL-00001" summary="Last version before turning to db">
       <option name="closed" value="true" />
@@ -172,12 +164,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/controller/MovieController.py</url>
+          <line>1</line>
           <option name="timeStamp" value="5" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/FastAPIProject$FastAPIProject.coverage" NAME="FastAPIProject Coverage Results" MODIFIED="1763587291409" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/FastAPIProject$FastAPIProject.coverage" NAME="FastAPIProject Coverage Results" MODIFIED="1763672664047" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
 </project>

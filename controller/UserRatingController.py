@@ -4,20 +4,15 @@ from sqlalchemy.orm import Session
 from db import get_db
 
 from model.DTOs.UserRatingDTO import UserRatingCreate, UserRatingOut, UserRatingUpdate
-
+from dependencies import get_user_rating_service
 from service.UserRatingService import UserRatingService
+from service.AchievementService import AchievementService
 from repository.UserRatingRepository import UserRatingRepository
 from repository.UserRepository import UserRepository
 from repository.MovieRepository import MovieRepository
 
 router = APIRouter(tags=["User Ratings methods"])
 
-def get_user_rating_service(db: Session = Depends(get_db)) -> UserRatingService:
-    return UserRatingService(
-        rating_repo=UserRatingRepository(db),
-        user_repo=UserRepository(db),
-        movie_repo=MovieRepository(db)
-    )
 @router.post("/userRating", response_model=UserRatingOut)
 async def create_userRating(
     dto: UserRatingCreate,
