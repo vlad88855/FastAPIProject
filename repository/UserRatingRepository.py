@@ -1,5 +1,8 @@
+import logging
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy import func
+
 
 from model.UserRatingORM import UserRatingORM
 from model.DTOs.UserRatingDTO import UserRatingCreate, UserRatingUpdate
@@ -10,6 +13,8 @@ class UserRatingRepository():
 
     def __init__(self, db: Session):
         self.db = db
+        self.logger = logging.getLogger(__name__)
+
 
     def create_rating(self, dto: UserRatingCreate) -> UserRatingORM:
         try:
@@ -21,8 +26,10 @@ class UserRatingRepository():
             self.db.add(rating)
             self.db.commit()
             self.db.refresh(rating)
+            self.logger.info(f"Created rating for user {dto.user_id} on movie {dto.movie_id}")
             return rating
         except IntegrityError as e:
+            self.logger.error(f"Error creating rating: {e}")
             self.db.rollback()
             if "uq_user_movie_rating" in str(e.orig).lower():
                 raise UserRatingExistsException(
@@ -34,10 +41,12 @@ class UserRatingRepository():
         rating = self.get_rating(id)
         self.db.delete(rating)
         self.db.commit()
+        self.logger.info(f"Deleted rating with ID: {id}")
 
     def delete_all_ratings(self) -> None:
         self.db.query(UserRatingORM).delete()
         self.db.commit()
+        self.logger.info("Deleted all ratings.")
 
     def get_rating(self, id: int) -> UserRatingORM:
         rating = self.db.get(UserRatingORM, id)
@@ -60,4 +69,9 @@ class UserRatingRepository():
 
         self.db.commit()
         self.db.refresh(rating)
+        self.logger.info(f"Updated rating with ID: {id}")
         return rating
+
+    def get_average_rating(self, movie_id: int) -> float:
+        avg_rating = self.db.query(func.avg(UserRatingORM.rating)).filter(UserRatingORM.movie_id == movie_id).scalar()
+        return float(avg_rating) if avg_rating is not None else 0.0

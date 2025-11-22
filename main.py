@@ -1,5 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+import logging
+
+from dependencies import get_config_service
 
 from controller import UserController, MovieController, UserRatingController
 from db import engine, Base
@@ -8,6 +11,12 @@ from repository.exceptions import (UsernameExistsException, EmailExistsException
                                    MovieTitleExistsException, MovieNotFoundException, UserRatingNotFoundException,
                                    UserRatingExistsException)
 from fastapi.responses import JSONResponse
+
+config_service = get_config_service()
+logging.basicConfig(
+    level=getattr(logging, config_service.get("logging_level", "INFO").upper()),
+    format="%(levelname)s:  %(asctime)s - %(message)s - %(name)s",
+)
 
 app = FastAPI()
 

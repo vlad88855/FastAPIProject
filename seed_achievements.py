@@ -21,7 +21,7 @@ def seed_achievements():
                 name="Horror Fan",
                 description="Rate 5 Horror movies",
                 condition_type="GENRE_MASTER",
-                condition_params={"genre": "Horror", "threshold": 5}
+                condition_params={"genre": "horror", "threshold": 5}
             )
         ]
 
@@ -31,7 +31,10 @@ def seed_achievements():
                 db.add(achievement)
                 print(f"Added achievement: {achievement.name}")
             else:
-                print(f"Achievement already exists: {achievement.name}")
+                existing.condition_params = achievement.condition_params
+                existing.description = achievement.description
+                existing.condition_type = achievement.condition_type
+                print(f"Updated achievement: {achievement.name}")
         
         db.commit()
     except Exception as e:

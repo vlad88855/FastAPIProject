@@ -57,6 +57,7 @@ class MovieRepository():
                 movie.genre = dto.genre
             self.db.commit()
             self.db.refresh(movie)
+            self.logger.info(f"Updated movie: {movie.title}, {movie.year}, {movie.genre}")
         except IntegrityError as e:
             self.db.rollback()
             msg = str(e.orig).lower()

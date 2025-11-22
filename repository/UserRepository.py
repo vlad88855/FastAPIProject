@@ -1,3 +1,4 @@
+import logging
 from pydantic import EmailStr
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
@@ -10,6 +11,7 @@ from repository.exceptions import EmailExistsException, UsernameExistsException,
 class UserRepository():
     def __init__(self, db: Session):
         self.db = db
+        self.logger = logging.getLogger(__name__)
 
     def create_user(self, dto: UserCreate) -> UserORM:
         try:
@@ -17,8 +19,10 @@ class UserRepository():
             self.db.add(user)
             self.db.commit()
             self.db.refresh(user)
+            self.logger.info(f"Created user with ID: {user.id}")
             return user
         except IntegrityError as e:
+            self.logger.error(f"Error creating user: {e}")
             self.db.rollback()
             msg = str(e.orig).lower()
             if "uq_users_username" in msg or "username" in msg:
@@ -32,7 +36,9 @@ class UserRepository():
             user = self.get_user(id)
             self.db.delete(user)
             self.db.commit()
+            self.logger.info(f"Deleted user with ID: {id}")
         except IntegrityError as e:
+            self.logger.error(f"Error deleting user {id}: {e}")
             self.db.rollback()
             raise e
 
@@ -56,7 +62,9 @@ class UserRepository():
             user.password = dto.password
         try:
             self.db.commit()
+            self.logger.info(f"Updated user with ID: {id}")
         except IntegrityError as ex:
+            self.logger.error(f"Error updating user {id}: {ex}")
             self.db.rollback()
             msg = str(ex.orig).lower()
             if "uq_users_username" in msg or "username" in msg:
@@ -70,6 +78,8 @@ class UserRepository():
         try:
             self.db.query(UserORM).delete()
             self.db.commit()
+            self.logger.info("Deleted all users.")
         except IntegrityError as e:
+            self.logger.error(f"Error deleting all users: {e}")
             self.db.rollback()
             raise e

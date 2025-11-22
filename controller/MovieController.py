@@ -17,6 +17,11 @@ async def get_movie(id: int, service: MovieService = Depends(get_movie_service))
     return service.get_movie(id)
 
 
+@router.get("/movies/{id}/rating", response_model=float)
+async def get_movie_rating(id: int, service: MovieService = Depends(get_movie_service)):
+    return service.get_movie_rating(id)
+
+
 @router.post("/movies", response_model=MovieOut)
 async def create_movie(dto: MovieCreate, service: MovieService = Depends(get_movie_service)):
     return service.create_movie(dto)

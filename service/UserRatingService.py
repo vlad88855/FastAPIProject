@@ -1,3 +1,4 @@
+import logging
 from typing import Optional, List
 from model.DTOs.UserRatingDTO import UserRatingOut, UserRatingUpdate, UserRatingCreate
 from repository.MovieRepository import MovieRepository
@@ -14,6 +15,7 @@ class UserRatingService:
         self.user_repo = user_repo
         self.movie_repo = movie_repo
         self.achievement_service = achievement_service
+        self.logger = logging.getLogger(__name__)
 
     def create_rating(self, dto: UserRatingCreate) -> UserRatingOut:
         self.user_repo.get_user(dto.user_id)
@@ -21,6 +23,7 @@ class UserRatingService:
 
         existing_rating = self.rating_repo.find_rating_by_user_movie(dto.user_id, dto.movie_id)
         if existing_rating:
+            self.logger.warning(f"Rating creation failed: User {dto.user_id} already rated movie {dto.movie_id}")
             raise UserRatingExistsException(
                 f"User {dto.user_id} rating for movie {dto.movie_id} already exists"
             )

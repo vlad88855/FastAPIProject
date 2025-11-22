@@ -1,3 +1,4 @@
+import logging
 from fastapi import HTTPException, status
 from model.UserORM import UserORM
 from model.DTOs.UserDTO import UserCreate, UserOut, UserUpdate
@@ -9,9 +10,11 @@ class UserService():
     def __init__(self, repository: UserRepository, config: ConfigService):
         self.repository = repository
         self.config = config
+        self.logger = logging.getLogger(__name__)
 
     def create_user(self, dto: UserCreate) -> UserOut:
         if not self.config.get("registration_enabled", True):
+            self.logger.warning("Registration attempt blocked: registration is disabled")
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Registration is currently disabled"

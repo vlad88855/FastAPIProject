@@ -1,5 +1,5 @@
 {
-  "registration_enabled": true,
+  "registration_enabled": false,
   "default_page_size": 10,
   "cache_ttl_seconds": 60,
   "logging_level": "INFO",

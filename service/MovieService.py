@@ -3,14 +3,16 @@ from model import MovieORM
 from model.DTOs.MovieDTO import MovieCreate, MovieUpdate, MovieOut, MovieGenre
 from repository.MovieRepository import MovieRepository
 from repository.UserRepository import UserRepository
+from repository.UserRatingRepository import UserRatingRepository
 from service.CacheService import CacheService
 from service.ConfigService import ConfigService
 
 
 class MovieService():
 
-    def __init__(self, repository: MovieRepository, cache: CacheService, config: ConfigService):
+    def __init__(self, repository: MovieRepository, rating_repository: UserRatingRepository, cache: CacheService, config: ConfigService):
         self.repository = repository
+        self.rating_repository = rating_repository
         self.cache = cache
         self.config = config
 
@@ -29,7 +31,7 @@ class MovieService():
             
         cache_key = f"movies_skip_{skip}_limit_{limit}_genre_{genre}"
         cached_data = self.cache.get(cache_key)
-        if cached_data:
+        if cached_data is not None:
             return cached_data
             
         if genre:
@@ -54,6 +56,11 @@ class MovieService():
     def delete_all_movies(self) -> None:
         self.repository.delete_all_movies()
         self.cache.clear_all_starting_with("movies_")
+
+    def get_movie_rating(self, movie_id: int) -> float:
+        # Ensure movie exists
+        self.repository.get_movie(movie_id)
+        return self.rating_repository.get_average_rating(movie_id)
     # def watch_movie(self, movie_id: int, user_id: int) -> Movie:
     #     # Необхідна перевірка на унікальність користувача
     #     UserRepository.get_user(user_id)
