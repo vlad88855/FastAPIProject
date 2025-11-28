@@ -22,6 +22,24 @@ def seed_achievements():
                 description="Rate 5 Horror movies",
                 condition_type="GENRE_MASTER",
                 condition_params={"genre": "horror", "threshold": 5}
+            ),
+            AchievementORM(
+                name="The Critic",
+                description="Leave 5 comments",
+                condition_type="COMMENT_COUNT",
+                condition_params={"threshold": 5}
+            ),
+            AchievementORM(
+                name="Genre Explorer",
+                description="Rate movies from 3 different genres",
+                condition_type="DISTINCT_GENRE",
+                condition_params={"threshold": 3}
+            ),
+            AchievementORM(
+                name="The Contrarian",
+                description="Rate a movie 10 stars when its average is below 5",
+                condition_type="CONTRARIAN",
+                condition_params={"min_user_rating": 10, "max_movie_avg": 5.0, "threshold": 1}
             )
         ]
 

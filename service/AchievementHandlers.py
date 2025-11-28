@@ -31,6 +31,42 @@ class GenreMasterHandler(BaseAchievementHandler):
             .scalar()
         )
         return count >= threshold
+class CommentHandler(BaseAchievementHandler):
+    def check(self, user_id: int, params: dict, db: Session) -> bool:
+        comment = params.get("comment")
+        threshold = params.get("threshold", 0)
+class CommentCountHandler(BaseAchievementHandler):
+    def check(self, user_id: int, params: dict, db: Session) -> bool:
+        threshold = params.get("threshold", 0)
+        count = db.query(func.count(UserRatingORM.id)).filter(
+            UserRatingORM.user_id == user_id,
+            UserRatingORM.comment.isnot(None)
+        ).scalar()
+        return count >= threshold
+
+class DistinctGenreHandler(BaseAchievementHandler):
+    def check(self, user_id: int, params: dict, db: Session) -> bool:
+        threshold = params.get("threshold", 0)
+        count = db.query(func.count(func.distinct(MovieORM.genre))).join(
+            UserRatingORM, UserRatingORM.movie_id == MovieORM.id
+        ).filter(UserRatingORM.user_id == user_id).scalar()
+        return count >= threshold
+
+class ContrarianHandler(BaseAchievementHandler):
+    def check(self, user_id: int, params: dict, db: Session) -> bool:
+        min_user_rating = params.get("min_user_rating", 10)
+        max_movie_avg = params.get("max_movie_avg", 5.0)
+        threshold = params.get("threshold", 1)
+        
+        count = db.query(func.count(UserRatingORM.id)).join(
+            MovieORM, UserRatingORM.movie_id == MovieORM.id
+        ).filter(
+            UserRatingORM.user_id == user_id,
+            UserRatingORM.rating >= min_user_rating,
+            MovieORM.average_rating < max_movie_avg
+        ).scalar()
+        
+        return count >= threshold
 
 class HandlerRegistry:
     _handlers: Dict[str, BaseAchievementHandler] = {}
@@ -45,3 +81,6 @@ class HandlerRegistry:
 
 HandlerRegistry.register("COUNT_REVIEWS", ReviewCountHandler())
 HandlerRegistry.register("GENRE_MASTER", GenreMasterHandler())
+HandlerRegistry.register("COMMENT_COUNT", CommentCountHandler())
+HandlerRegistry.register("DISTINCT_GENRE", DistinctGenreHandler())
+HandlerRegistry.register("CONTRARIAN", ContrarianHandler())

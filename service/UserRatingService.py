@@ -31,7 +31,9 @@ class UserRatingService:
         rating_obj = self.rating_repo.create_rating(dto)
         
         self.achievement_service.check_new_achievements(dto.user_id)
-        
+        movie = self.movie_repo.get_movie(dto.movie_id)
+        self.movie_repo.update_average_rating(movie.id, self.rating_repo.get_average_rating(dto.movie_id))
+
         return UserRatingOut.model_validate(rating_obj)
 
     def delete_rating(self, id: int) -> None:

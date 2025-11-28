@@ -60,6 +60,9 @@ class UserRepository():
             user.email = dto.email
         if dto.password is not None:
             user.password = dto.password
+        if dto.avatar_url is not None:
+            user.avatar_url = dto.avatar_url
+            
         try:
             self.db.commit()
             self.logger.info(f"Updated user with ID: {id}")
@@ -74,6 +77,7 @@ class UserRepository():
             raise
         self.db.refresh(user)
         return user
+
     def delete_all_users(self) -> None:
         try:
             self.db.query(UserORM).delete()

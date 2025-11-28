@@ -7,6 +7,7 @@ class UserAchievementOut(BaseModel):
     name: str
     description: str
     earned_at: datetime
+    icon_url: Optional[str] = None
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -16,5 +17,6 @@ class AchievementStatusOut(BaseModel):
     description: str
     earned: bool
     earned_at: Optional[datetime] = None
+    icon_url: Optional[str] = None
 
     model_config = ConfigDict(from_attributes=True)

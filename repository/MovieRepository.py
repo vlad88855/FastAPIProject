@@ -3,6 +3,7 @@ from typing import List
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
+from model.DTOs.UserRatingDTO import UserRatingUpdate
 from model.MovieORM import MovieORM
 from model.DTOs.MovieDTO import MovieCreate, MovieUpdate, MovieGenre
 from repository.exceptions import MovieNotFoundException, MovieTitleExistsException
@@ -15,7 +16,15 @@ class MovieRepository():
 
     def create_movie(self, dto: MovieCreate) -> MovieORM:
         try:
-            movie = MovieORM(title=dto.title, year=dto.year, genre=dto.genre)
+            movie = MovieORM(
+                title=dto.title, 
+                year=dto.year, 
+                genre=dto.genre,
+                description=dto.description,
+                director=dto.director,
+                duration_minutes=dto.duration_minutes,
+                poster_url=dto.poster_url
+            )
             self.db.add(movie)
             self.db.commit()
             self.db.refresh(movie)
@@ -55,14 +64,35 @@ class MovieRepository():
                 movie.year = dto.year
             if dto.genre is not None:
                 movie.genre = dto.genre
+            if dto.description is not None:
+                movie.description = dto.description
+            if dto.director is not None:
+                movie.director = dto.director
+            if dto.duration_minutes is not None:
+                movie.duration_minutes = dto.duration_minutes
+            if dto.poster_url is not None:
+                movie.poster_url = dto.poster_url
+            
             self.db.commit()
             self.db.refresh(movie)
-            self.logger.info(f"Updated movie: {movie.title}, {movie.year}, {movie.genre}")
+            self.logger.info(f"Updated movie: {movie.title}")
         except IntegrityError as e:
             self.db.rollback()
             msg = str(e.orig).lower()
             if "uq_movies_title" in msg or "title" in msg:
                 raise MovieTitleExistsException(f"Movie {dto.title} already exists")
+            raise e
+        return movie
+
+    def update_average_rating(self, movie_id: int, new_average: float) -> MovieORM:
+        try:
+            movie = self.get_movie(movie_id)
+            movie.average_rating = new_average
+            self.db.commit()
+            self.db.refresh(movie)
+            self.logger.info(f"Updated movie rating: {movie.title} -> {movie.average_rating}")
+        except IntegrityError as e:
+            self.db.rollback()
             raise e
         return movie
 

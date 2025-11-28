@@ -22,7 +22,8 @@ class ConfigService:
                 "registration_enabled": True,
                 "default_page_size": 10,
                 "cache_ttl_seconds": 60,
-                "logging_level": "INFO"
+                "logging_level": "INFO",
+                "database_url": "postgresql+psycopg2://postgres:@localhost:5151/fastapi_db"
             }
 
     def get(self, key: str, default: Any = None) -> Any:

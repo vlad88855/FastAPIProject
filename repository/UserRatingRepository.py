@@ -21,7 +21,8 @@ class UserRatingRepository():
             rating = UserRatingORM(
                 user_id=dto.user_id,
                 movie_id=dto.movie_id,
-                rating=dto.rating
+                rating=dto.rating,
+                comment = dto.comment
             )
             self.db.add(rating)
             self.db.commit()
@@ -75,3 +76,5 @@ class UserRatingRepository():
     def get_average_rating(self, movie_id: int) -> float:
         avg_rating = self.db.query(func.avg(UserRatingORM.rating)).filter(UserRatingORM.movie_id == movie_id).scalar()
         return float(avg_rating) if avg_rating is not None else 0.0
+    def get_user_ratings(self, user_id: int) -> list[UserRatingORM]:
+        return self.db.query(UserRatingORM).filter(UserRatingORM.user_id == user_id).all()

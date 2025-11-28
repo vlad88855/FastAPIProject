@@ -4,23 +4,24 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="13ec6e7e-ac23-4930-9a2f-e6a7ed2442bd" name="Changes" comment="Last version before turning to db">
+    <list default="true" id="13ec6e7e-ac23-4930-9a2f-e6a7ed2442bd" name="Changes" comment="Last version of lab3.">
+      <change afterPath="$PROJECT_DIR$/db_init.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/app_config.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controller/MovieController.py" beforeDir="false" afterPath="$PROJECT_DIR$/controller/MovieController.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controller/UserController.py" beforeDir="false" afterPath="$PROJECT_DIR$/controller/UserController.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dependencies.py" beforeDir="false" afterPath="$PROJECT_DIR$/dependencies.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/AchievementORM.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/AchievementORM.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/DTOs/AchievementDTO.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/DTOs/AchievementDTO.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/DTOs/MovieDTO.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/DTOs/MovieDTO.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/DTOs/UserDTO.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/DTOs/UserDTO.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/DTOs/UserRatingDTO.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/DTOs/UserRatingDTO.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/MovieORM.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/MovieORM.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/UserORM.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/UserORM.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/UserRatingORM.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/UserRatingORM.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/repository/MovieRepository.py" beforeDir="false" afterPath="$PROJECT_DIR$/repository/MovieRepository.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/repository/UserRatingRepository.py" beforeDir="false" afterPath="$PROJECT_DIR$/repository/UserRatingRepository.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/repository/UserRepository.py" beforeDir="false" afterPath="$PROJECT_DIR$/repository/UserRepository.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/seed_achievements.py" beforeDir="false" afterPath="$PROJECT_DIR$/seed_achievements.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/AchievementService.py" beforeDir="false" afterPath="$PROJECT_DIR$/service/AchievementService.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/CacheService.py" beforeDir="false" afterPath="$PROJECT_DIR$/service/CacheService.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/MovieService.py" beforeDir="false" afterPath="$PROJECT_DIR$/service/MovieService.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/service/AchievementHandlers.py" beforeDir="false" afterPath="$PROJECT_DIR$/service/AchievementHandlers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/service/ConfigService.py" beforeDir="false" afterPath="$PROJECT_DIR$/service/ConfigService.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/service/UserRatingService.py" beforeDir="false" afterPath="$PROJECT_DIR$/service/UserRatingService.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/UserService.py" beforeDir="false" afterPath="$PROJECT_DIR$/service/UserService.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/verify_refactor.py" beforeDir="false" afterPath="$PROJECT_DIR$/verify_refactor.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,6 +40,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;vlad88855&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/vlad88855/FastAPIProject.git&quot;,
+    &quot;accountId&quot;: &quot;555b2d4f-8939-4f30-8d73-edb1b144ad7e&quot;
+  }
+}</component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="AISelfReview" />
   </component>
@@ -125,7 +138,11 @@
       <workItem from="1762939520164" duration="9322000" />
       <workItem from="1763585922753" duration="16114000" />
       <workItem from="1763752039627" duration="1571000" />
-      <workItem from="1763852562626" duration="1803000" />
+      <workItem from="1763852562626" duration="3311000" />
+      <workItem from="1763925346103" duration="2093000" />
+      <workItem from="1764103323356" duration="12502000" />
+      <workItem from="1764234572526" duration="4237000" />
+      <workItem from="1764276249220" duration="3641000" />
     </task>
     <task id="LOCAL-00001" summary="Last version before turning to db">
       <option name="closed" value="true" />
@@ -135,7 +152,15 @@
       <option name="project" value="LOCAL" />
       <updated>1762205922056</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Last version of lab3.">
+      <option name="closed" value="true" />
+      <created>1763854538679</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1763854538679</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -160,8 +185,10 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Last working version" />
+    <MESSAGE value="Added lab3 requirements" />
     <MESSAGE value="Last version before turning to db" />
-    <option name="LAST_COMMIT_MESSAGE" value="Last version before turning to db" />
+    <MESSAGE value="Last version of lab3." />
+    <option name="LAST_COMMIT_MESSAGE" value="Last version of lab3." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -179,6 +206,6 @@
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/FastAPIProject$FastAPIProject.coverage" NAME="FastAPIProject Coverage Results" MODIFIED="1763854078113" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/FastAPIProject$FastAPIProject.coverage" NAME="FastAPIProject Coverage Results" MODIFIED="1764236801366" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
 </project>
