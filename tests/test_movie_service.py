@@ -23,7 +23,7 @@ class TestMovieService(unittest.TestCase):
             self.mock_config
         )
 
-    # --- 1. Single Entity CRUD ---
+    # --- CRUD ---
 
     def test_create_success(self):
         # Arrange
@@ -82,7 +82,7 @@ class TestMovieService(unittest.TestCase):
         self.mock_repo.create_movie.side_effect = Exception("Duplicate entry")
 
         # Act & Assert
-        with self.assertRaises(Exception): # Expecting 409 or similar
+        with self.assertRaises(Exception):
              self.service.create_movie(dto)
 
     def test_get_not_found(self):
@@ -91,7 +91,7 @@ class TestMovieService(unittest.TestCase):
         self.mock_repo.get_movie.return_value = None
 
         # Act & Assert
-        with self.assertRaises(Exception): # Expecting 404
+        with self.assertRaises(Exception):
              self.service.get_movie(movie_id)
 
     def test_update_not_found(self):
@@ -101,7 +101,7 @@ class TestMovieService(unittest.TestCase):
         self.mock_repo.update_movie.return_value = None
 
         # Act & Assert
-        with self.assertRaises(Exception): # Expecting 404
+        with self.assertRaises(Exception):
              self.service.update_movie(movie_id, dto)
 
     def test_delete_not_found(self):
@@ -110,10 +110,10 @@ class TestMovieService(unittest.TestCase):
         self.mock_repo.get_movie.return_value = None
         
         # Act & Assert
-        with self.assertRaises(Exception): # Expecting 404
+        with self.assertRaises(Exception):
             self.service.delete_movie(movie_id)
 
-    # --- 2. Collections & Pagination ---
+    # --- Collections ---
 
     def test_get_list_success(self):
         # Arrange
@@ -152,7 +152,7 @@ class TestMovieService(unittest.TestCase):
         # Assert
         self.mock_repo.get_paginated.assert_called_once_with(5, 20)
 
-    # --- 3. Unique Logic (Caching, Ratings, Genres) ---
+    # --- Logic ---
 
     def test_get_all_movies_cache_hit(self):
         # Arrange
@@ -216,7 +216,6 @@ class TestMovieService(unittest.TestCase):
         result = self.service.get_movie_rating(movie_id)
 
         # Assert
-        # Should return 0.0, not None
         self.assertEqual(result, 0.0)
         self.assertIsInstance(result, float)
 

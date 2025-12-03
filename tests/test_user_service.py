@@ -5,13 +5,6 @@ from service.UserService import UserService
 from repository.UserRepository import UserRepository
 from service.ConfigService import ConfigService
 from model.DTOs.UserDTO import UserCreate, UserOut, UserUpdate
-import unittest
-from unittest.mock import MagicMock
-from fastapi import HTTPException
-from service.UserService import UserService
-from repository.UserRepository import UserRepository
-from service.ConfigService import ConfigService
-from model.DTOs.UserDTO import UserCreate, UserOut, UserUpdate
 from model.UserORM import UserORM, UserRole
 from datetime import datetime
 
@@ -22,14 +15,14 @@ class TestUserService(unittest.TestCase):
         self.mock_config = MagicMock(spec=ConfigService)
         self.service = UserService(self.mock_repo, self.mock_config)
 
-    # --- 1. Single Entity CRUD ---
+    # --- CRUD ---
 
     def test_create_success(self):
         # Arrange
         dto = UserCreate(username="testuser", email="test@example.com", password="password123")
         user_orm = UserORM(id=1, username="testuser", email="test@example.com", role=UserRole.USER, created_at=datetime.utcnow())
         
-        self.mock_config.get.return_value = True # Registration enabled
+        self.mock_config.get.return_value = True
         self.mock_repo.create_user.return_value = user_orm
 
         # Act
@@ -123,7 +116,7 @@ class TestUserService(unittest.TestCase):
             
         self.assertEqual(context.exception.status_code, 404)
 
-    # --- 2. Collections ---
+    # --- Collections ---
 
     def test_get_list_success(self):
         # Arrange
@@ -148,12 +141,12 @@ class TestUserService(unittest.TestCase):
         self.assertEqual(result, [])
         self.assertIsInstance(result, list)
 
-    # --- 3. Unique Logic ---
+    # --- Logic ---
 
     def test_create_user_registration_disabled(self):
         # Arrange
         dto = UserCreate(username="testuser", email="test@example.com", password="password123")
-        self.mock_config.get.return_value = False # Registration DISABLED
+        self.mock_config.get.return_value = False
 
         # Act & Assert
         with self.assertRaises(HTTPException) as cm:
@@ -165,7 +158,6 @@ class TestUserService(unittest.TestCase):
     def test_update_partial_fields(self):
         # Arrange
         user_id = 1
-        # Only updating avatar_url, others None
         update_dto = UserUpdate(avatar_url="http://new.avatar")
         
         user_orm = UserORM(id=user_id, username="old", email="old@t.com", role=UserRole.USER, created_at=datetime.utcnow(), avatar_url="http://new.avatar")

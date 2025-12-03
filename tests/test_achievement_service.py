@@ -24,11 +24,10 @@ class TestAchievementService(unittest.TestCase):
             condition_params={"threshold": 5}
         )
         self.mock_repo.get_all_achievements.return_value = [achievement]
-        self.mock_repo.get_user_achievement_ids.return_value = set() # User has no achievements
+        self.mock_repo.get_user_achievement_ids.return_value = set()
 
-        # Mock the handler
         mock_handler = MagicMock(spec=BaseAchievementHandler)
-        mock_handler.check.return_value = True # Condition met
+        mock_handler.check.return_value = True
         
         with patch.object(HandlerRegistry, 'get_handler', return_value=mock_handler):
             # Act
@@ -45,7 +44,7 @@ class TestAchievementService(unittest.TestCase):
         user_id = 1
         achievement = AchievementORM(id=1, name="Test Achievement", condition_type="TEST_TYPE", condition_params={})
         self.mock_repo.get_all_achievements.return_value = [achievement]
-        self.mock_repo.get_user_achievement_ids.return_value = {1} # User already has this achievement
+        self.mock_repo.get_user_achievement_ids.return_value = {1}
 
         # Act
         new_achievements = self.service.check_new_achievements(user_id)
@@ -62,7 +61,7 @@ class TestAchievementService(unittest.TestCase):
         self.mock_repo.get_user_achievement_ids.return_value = set()
 
         mock_handler = MagicMock(spec=BaseAchievementHandler)
-        mock_handler.check.return_value = False # Condition NOT met
+        mock_handler.check.return_value = False
         
         with patch.object(HandlerRegistry, 'get_handler', return_value=mock_handler):
             # Act
@@ -92,12 +91,10 @@ class TestAchievementService(unittest.TestCase):
     def test_check_new_achievements_commits(self):
         # Arrange
         user_id = 1
-        # Mock achievement that is NOT earned yet
         ach = AchievementORM(id=1, name="Test", condition_type="REVIEW_COUNT", condition_params={"count": 5})
         self.mock_repo.get_all_achievements.return_value = [ach]
-        self.mock_repo.get_user_achievement_ids.return_value = [] # User has none
+        self.mock_repo.get_user_achievement_ids.return_value = []
         
-        # Mock handler to return True (earned)
         mock_handler = MagicMock()
         mock_handler.check.return_value = True
         
@@ -106,8 +103,6 @@ class TestAchievementService(unittest.TestCase):
             self.service.check_new_achievements(user_id)
 
         # Assert
-        # We expect commit to be called to save the new achievement
-        # This will FAIL because of the early return in the service
         self.mock_db.commit.assert_called_once()
 
     def test_get_achievements_status(self):
@@ -125,10 +120,8 @@ class TestAchievementService(unittest.TestCase):
 
         # Assert
         self.assertEqual(len(result), 2)
-        # Ach1 should be earned
         self.assertEqual(result[0].id, 1)
         self.assertTrue(result[0].earned)
-        # Ach2 should NOT be earned
         self.assertEqual(result[1].id, 2)
         self.assertFalse(result[1].earned)
 

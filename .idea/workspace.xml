@@ -5,23 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="13ec6e7e-ac23-4930-9a2f-e6a7ed2442bd" name="Changes" comment="Last version of lab3.">
-      <change afterPath="$PROJECT_DIR$/db_init.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/AchievementORM.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/AchievementORM.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/DTOs/AchievementDTO.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/DTOs/AchievementDTO.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/DTOs/MovieDTO.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/DTOs/MovieDTO.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/DTOs/UserDTO.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/DTOs/UserDTO.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/DTOs/UserRatingDTO.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/DTOs/UserRatingDTO.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/MovieORM.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/MovieORM.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/UserORM.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/UserORM.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/UserRatingORM.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/UserRatingORM.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/repository/MovieRepository.py" beforeDir="false" afterPath="$PROJECT_DIR$/repository/MovieRepository.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/repository/UserRatingRepository.py" beforeDir="false" afterPath="$PROJECT_DIR$/repository/UserRatingRepository.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/repository/UserRepository.py" beforeDir="false" afterPath="$PROJECT_DIR$/repository/UserRepository.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/seed_achievements.py" beforeDir="false" afterPath="$PROJECT_DIR$/seed_achievements.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/AchievementHandlers.py" beforeDir="false" afterPath="$PROJECT_DIR$/service/AchievementHandlers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/ConfigService.py" beforeDir="false" afterPath="$PROJECT_DIR$/service/ConfigService.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/UserRatingService.py" beforeDir="false" afterPath="$PROJECT_DIR$/service/UserRatingService.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_achievement_handlers.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_achievement_handlers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_achievement_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_achievement_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_cache.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_cache.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_config.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_movie_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_movie_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_user_rating_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_user_rating_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_user_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_user_service.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -142,7 +133,8 @@
       <workItem from="1763925346103" duration="2093000" />
       <workItem from="1764103323356" duration="12502000" />
       <workItem from="1764234572526" duration="4237000" />
-      <workItem from="1764276249220" duration="3641000" />
+      <workItem from="1764276249220" duration="7837000" />
+      <workItem from="1764699679149" duration="502000" />
     </task>
     <task id="LOCAL-00001" summary="Last version before turning to db">
       <option name="closed" value="true" />

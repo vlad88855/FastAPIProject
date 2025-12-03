@@ -6,15 +6,14 @@ from service.ConfigService import ConfigService
 class TestConfig(unittest.TestCase):
 
     def setUp(self):
-        # We will mock the open function to avoid reading real files
         pass
 
     @patch("os.path.exists")
     @patch("builtins.open", new_callable=unittest.mock.mock_open, read_data='{"key": "value"}')
     def test_load_config_success(self, mock_file, mock_exists):
         # Arrange
-        mock_exists.return_value = True # File exists
-        ConfigService._instance = None # Reset singleton
+        mock_exists.return_value = True
+        ConfigService._instance = None
         
         # Act
         service = ConfigService()
@@ -25,15 +24,13 @@ class TestConfig(unittest.TestCase):
     @patch("os.path.exists")
     def test_load_config_file_not_found(self, mock_exists):
         # Arrange
-        mock_exists.return_value = False # File does NOT exist
-        ConfigService._instance = None # Reset singleton
+        mock_exists.return_value = False
+        ConfigService._instance = None
         
         # Act
         service = ConfigService()
 
         # Assert
-        # Should default to empty dict or handle error gracefully
-        # Based on implementation, it sets defaults if file not found
         self.assertEqual(service.get("registration_enabled"), True)
 
     @patch("builtins.open", new_callable=unittest.mock.mock_open, read_data='{"key": "value"}')

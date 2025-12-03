@@ -12,7 +12,6 @@ class TestAchievementHandlers(unittest.TestCase):
         user_id = 1
         params = {"threshold": 5}
         
-        # Mock the query chain: db.query().filter().scalar() -> 5
         mock_db.query.return_value.filter.return_value.scalar.return_value = 5
         
         # Act
@@ -28,7 +27,6 @@ class TestAchievementHandlers(unittest.TestCase):
         user_id = 1
         params = {"threshold": 6}
         
-        # Mock the query chain: db.query().filter().scalar() -> 5
         mock_db.query.return_value.filter.return_value.scalar.return_value = 5
         
         # Act
@@ -44,7 +42,6 @@ class TestAchievementHandlers(unittest.TestCase):
         user_id = 1
         params = {"genre": "Horror", "threshold": 5}
         
-        # Mock the query chain: db.query().join().filter().scalar() -> 5
         mock_db.query.return_value.join.return_value.filter.return_value.scalar.return_value = 5
         
         # Act

@@ -26,7 +26,7 @@ class TestUserRatingService(unittest.TestCase):
             self.mock_achievement_service
         )
 
-    # --- 1. Single Entity CRUD ---
+    # --- CRUD ---
 
     def test_create_success(self):
         # Arrange
@@ -36,9 +36,9 @@ class TestUserRatingService(unittest.TestCase):
             comment="Great!", created_at=datetime.utcnow(), updated_at=datetime.utcnow()
         )
         
-        self.mock_user_repo.get_user.return_value = MagicMock() # User exists
-        self.mock_movie_repo.get_movie.return_value = MovieORM(id=1, view_count=0) # Movie exists
-        self.mock_rating_repo.find_rating_by_user_movie.return_value = None # No duplicate
+        self.mock_user_repo.get_user.return_value = MagicMock()
+        self.mock_movie_repo.get_movie.return_value = MovieORM(id=1, view_count=0)
+        self.mock_rating_repo.find_rating_by_user_movie.return_value = None
         self.mock_rating_repo.create_rating.return_value = rating_orm
         self.mock_rating_repo.get_average_rating.return_value = 10.0
 
@@ -75,7 +75,7 @@ class TestUserRatingService(unittest.TestCase):
             comment="Good", created_at=datetime.utcnow(), updated_at=datetime.utcnow()
         )
         self.mock_rating_repo.update_rating.return_value = rating_orm
-        self.mock_rating_repo.get_rating.return_value = rating_orm # For getting movie_id if needed
+        self.mock_rating_repo.get_rating.return_value = rating_orm
 
         # Act
         result = self.service.update_rating(rating_id, dto)
@@ -87,10 +87,6 @@ class TestUserRatingService(unittest.TestCase):
     def test_delete_success(self):
         # Arrange
         rating_id = 1
-        # Need to mock get_rating if delete logic uses it to find movie_id for average update
-        # But standard delete usually just calls repo.
-        # However, our service logic MIGHT need to update average after delete.
-        # Let's assume standard delete for now, and check side effects in separate test.
 
         # Act
         self.service.delete_rating(rating_id)
@@ -103,7 +99,7 @@ class TestUserRatingService(unittest.TestCase):
         dto = UserRatingCreate(user_id=1, movie_id=1, rating=10)
         self.mock_user_repo.get_user.return_value = MagicMock()
         self.mock_movie_repo.get_movie.return_value = MagicMock()
-        self.mock_rating_repo.find_rating_by_user_movie.return_value = MagicMock() # Exists!
+        self.mock_rating_repo.find_rating_by_user_movie.return_value = MagicMock()
 
         # Act & Assert
         with self.assertRaises(UserRatingExistsException):
@@ -115,18 +111,18 @@ class TestUserRatingService(unittest.TestCase):
         self.mock_rating_repo.get_rating.return_value = None
 
         # Act & Assert
-        with self.assertRaises(Exception): # Expecting 404
+        with self.assertRaises(Exception):
             self.service.get_rating(rating_id)
 
     def test_update_not_found(self):
         # Arrange
         rating_id = 999
         dto = UserRatingUpdate(rating=5)
-        self.mock_rating_repo.get_rating.return_value = None # Check existence usually happens
+        self.mock_rating_repo.get_rating.return_value = None
         self.mock_rating_repo.update_rating.return_value = None
 
         # Act & Assert
-        with self.assertRaises(Exception): # Expecting 404
+        with self.assertRaises(Exception):
             self.service.update_rating(rating_id, dto)
 
     def test_delete_not_found(self):
@@ -135,10 +131,10 @@ class TestUserRatingService(unittest.TestCase):
         self.mock_rating_repo.get_rating.return_value = None
         
         # Act & Assert
-        with self.assertRaises(Exception): # Expecting 404
+        with self.assertRaises(Exception):
             self.service.delete_rating(rating_id)
 
-    # --- 2. Collections ---
+    # --- Collections ---
 
     def test_get_list_success(self):
         # Arrange
@@ -165,7 +161,7 @@ class TestUserRatingService(unittest.TestCase):
         # Assert
         self.assertEqual(result, [])
 
-    # --- 3. Unique Logic (Side Effects & Validation) ---
+    # --- Logic ---
 
     def test_create_rating_updates_average(self):
         # Arrange
@@ -190,7 +186,6 @@ class TestUserRatingService(unittest.TestCase):
         rating_id = 1
         dto = UserRatingUpdate(rating=5)
         
-        # Mock finding the rating to get movie_id
         existing_rating = UserRatingORM(
             id=1, user_id=1, movie_id=1, rating=10, 
             comment="", created_at=datetime.utcnow(), updated_at=datetime.utcnow()
@@ -249,7 +244,7 @@ class TestUserRatingService(unittest.TestCase):
         self.mock_user_repo.get_user.return_value = None
 
         # Act & Assert
-        with self.assertRaises(Exception): # Expecting 404
+        with self.assertRaises(Exception):
             self.service.create_rating(dto)
 
     def test_create_rating_movie_not_found(self):
@@ -259,7 +254,7 @@ class TestUserRatingService(unittest.TestCase):
         self.mock_movie_repo.get_movie.return_value = None
 
         # Act & Assert
-        with self.assertRaises(Exception): # Expecting 404
+        with self.assertRaises(Exception):
             self.service.create_rating(dto)
 
 if __name__ == '__main__':

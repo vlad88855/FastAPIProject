@@ -5,12 +5,9 @@ from service.CacheService import CacheService
 class TestCache(unittest.TestCase):
 
     def setUp(self):
-        # Mock the internal cache storage (dictionary in this case)
         self.mock_config = MagicMock()
-        self.mock_config.get.return_value = 60 # Return int for TTL
+        self.mock_config.get.return_value = 60
         self.service = CacheService(self.mock_config)
-        # Since CacheService uses a simple dict, we can test it directly or mock the dict if it was external
-        # For this example, we'll test the logic directly as it's an in-memory cache
         self.service._cache = {} 
 
     def test_set_and_get(self):
