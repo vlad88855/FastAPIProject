@@ -5,14 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="13ec6e7e-ac23-4930-9a2f-e6a7ed2442bd" name="Changes" comment="Last version of lab3.">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_achievement_handlers.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_achievement_handlers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_achievement_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_achievement_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_cache.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_cache.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_config.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_movie_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_movie_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_user_rating_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_user_rating_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_user_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_user_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/service/AchievementService.py" beforeDir="false" afterPath="$PROJECT_DIR$/service/AchievementService.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_achievement_views.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_achievement_views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -135,6 +129,7 @@
       <workItem from="1764234572526" duration="4237000" />
       <workItem from="1764276249220" duration="7837000" />
       <workItem from="1764699679149" duration="502000" />
+      <workItem from="1764872835101" duration="307000" />
     </task>
     <task id="LOCAL-00001" summary="Last version before turning to db">
       <option name="closed" value="true" />

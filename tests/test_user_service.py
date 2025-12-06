@@ -3,6 +3,7 @@ from unittest.mock import MagicMock
 from fastapi import HTTPException
 from service.UserService import UserService
 from repository.UserRepository import UserRepository
+from repository.exceptions import UserNotFoundException, UsernameExistsException, EmailExistsException
 from service.ConfigService import ConfigService
 from model.DTOs.UserDTO import UserCreate, UserOut, UserUpdate
 from model.UserORM import UserORM, UserRole
@@ -74,47 +75,39 @@ class TestUserService(unittest.TestCase):
         # Arrange
         dto = UserCreate(username="test", email="test@test.com", password="password")
         self.mock_config.get.return_value = True
-        self.mock_repo.create_user.side_effect = Exception("Duplicate entry")
+        self.mock_repo.create_user.side_effect = UsernameExistsException("Username test already exists")
 
         # Act & Assert
-        with self.assertRaises(HTTPException) as context:
+        with self.assertRaises(UsernameExistsException):
             self.service.create_user(dto)
-        
-        self.assertEqual(context.exception.status_code, 409)
 
     def test_get_not_found(self):
         # Arrange
         user_id = 999
-        self.mock_repo.get_user.return_value = None
+        self.mock_repo.get_user.side_effect = UserNotFoundException(f"User {user_id} not found")
 
         # Act & Assert
-        with self.assertRaises(HTTPException) as context:
+        with self.assertRaises(UserNotFoundException):
             self.service.get_user(user_id)
-        
-        self.assertEqual(context.exception.status_code, 404)
 
     def test_update_not_found(self):
         # Arrange
         user_id = 999
         update_dto = UserUpdate(username="newname")
-        self.mock_repo.update_user.return_value = None
+        self.mock_repo.update_user.side_effect = UserNotFoundException(f"User {user_id} not found")
 
         # Act & Assert
-        with self.assertRaises(HTTPException) as context:
+        with self.assertRaises(UserNotFoundException):
             self.service.update_user(user_id, update_dto)
-            
-        self.assertEqual(context.exception.status_code, 404)
 
     def test_delete_not_found(self):
         # Arrange
         user_id = 999
-        self.mock_repo.get_user.return_value = None 
+        self.mock_repo.delete_user.side_effect = UserNotFoundException(f"User {user_id} not found")
         
         # Act & Assert
-        with self.assertRaises(HTTPException) as context:
+        with self.assertRaises(UserNotFoundException):
             self.service.delete_user(user_id)
-            
-        self.assertEqual(context.exception.status_code, 404)
 
     # --- Collections ---
 

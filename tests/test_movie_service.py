@@ -7,6 +7,7 @@ from service.CacheService import CacheService
 from service.ConfigService import ConfigService
 from model.DTOs.MovieDTO import MovieCreate, MovieOut, MovieGenre, MovieUpdate
 from model.MovieORM import MovieORM
+from repository.exceptions import MovieNotFoundException
 
 class TestMovieService(unittest.TestCase):
 
@@ -107,10 +108,10 @@ class TestMovieService(unittest.TestCase):
     def test_delete_not_found(self):
         # Arrange
         movie_id = 999
-        self.mock_repo.get_movie.return_value = None
+        self.mock_repo.delete_movie.side_effect = MovieNotFoundException(f"Movie {movie_id} not found")
         
         # Act & Assert
-        with self.assertRaises(Exception):
+        with self.assertRaises(MovieNotFoundException):
             self.service.delete_movie(movie_id)
 
     # --- Collections ---

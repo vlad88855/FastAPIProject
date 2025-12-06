@@ -11,9 +11,7 @@ from repository.AchievementRepository import AchievementRepository
 class AchievementService:
     def __init__(self, repo: AchievementRepository, db: Session):
         self.repo = repo
-        self.db = db # Keeping db for handlers that might need it, or we should refactor handlers too?
-        # Handlers currently take 'db' as argument. Ideally handlers should also use repositories or not access DB directly.
-        # For now, let's keep db for handlers but use repo for service logic.
+        self.db = db 
         self.logger = logging.getLogger(__name__)
 
     def check_new_achievements(self, user_id: int) -> List[AchievementORM]:
@@ -34,13 +32,7 @@ class AchievementService:
                 self.repo.add_user_achievement(user_id, achievement.id)
                 newly_earned.append(achievement)
                 self.logger.info(f"User {user_id} earned new achievement: {achievement.name}")
-        
-        # Repo commits individually in add_user_achievement, so we might not need bulk commit here 
-        # or we should change repo to not commit immediately if we want bulk.
-        # For now, let's assume repo commits.
-        
-        return newly_earned
-        
+                
         if newly_earned:
             self.db.commit()
             

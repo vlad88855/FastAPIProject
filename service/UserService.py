@@ -3,6 +3,7 @@ from fastapi import HTTPException, status
 from model.UserORM import UserORM
 from model.DTOs.UserDTO import UserCreate, UserOut, UserUpdate
 from repository.UserRepository import UserRepository
+from repository.exceptions import UserNotFoundException, UsernameExistsException, EmailExistsException
 from service.ConfigService import ConfigService
 
 class UserService():

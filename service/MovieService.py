@@ -60,7 +60,8 @@ class MovieService():
     def get_movie_rating(self, movie_id: int) -> float:
         # Ensure movie exists
         self.repository.get_movie(movie_id)
-        return self.rating_repository.get_average_rating(movie_id)
+        rating = self.rating_repository.get_average_rating(movie_id)
+        return rating if rating is not None else 0.0
     # def watch_movie(self, movie_id: int, user_id: int) -> Movie:
     #     # Необхідна перевірка на унікальність користувача
     #     UserRepository.get_user(user_id)

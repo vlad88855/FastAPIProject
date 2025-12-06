@@ -37,7 +37,11 @@ class UserRatingService:
         return UserRatingOut.model_validate(rating_obj)
 
     def delete_rating(self, id: int) -> None:
+        rating_obj = self.rating_repo.get_rating(id)
+        movie_id = rating_obj.movie_id
         self.rating_repo.delete_rating(id)
+        new_average = self.rating_repo.get_average_rating(movie_id)
+        self.movie_repo.update_average_rating(movie_id, new_average)
 
     def get_rating(self, id: int) -> UserRatingOut:
         rating_obj = self.rating_repo.get_rating(id)
@@ -49,6 +53,9 @@ class UserRatingService:
 
     def update_rating(self, id: int, dto: UserRatingUpdate) -> UserRatingOut:
         rating_obj = self.rating_repo.update_rating(id, dto)
+        movie_id = rating_obj.movie_id
+        new_average = self.rating_repo.get_average_rating(movie_id)
+        self.movie_repo.update_average_rating(movie_id, new_average)
         return UserRatingOut.model_validate(rating_obj)
 
     def delete_all_ratings(self) -> None:
